@@ -61,7 +61,8 @@
                         .build();
                     const xdr = tx.toXDR();
                     output_text.innerHTML =
-                        `XDR: ${xdr}
+                        `XDR: <code>${xdr}</code>
+                        <br>
                         <a href="https://laboratory.stellar.org/#xdr-viewer?input=${xdr}">View</a>
                         <a href="https://laboratory.stellar.org/#txsigner?xdr=${xdr}">Sign</a>`;
                     error_text.innerText = '';
