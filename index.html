@@ -1,0 +1,75 @@
+<html>
+    <head>
+        <title>The Little Signer</title>
+        <script src="bower_components/stellar-sdk/stellar-sdk.js"></script>
+    </head>
+    <body>
+        <div class="ribbon right">
+            <a href="https://github.com/montelibero-org/little-signer">
+                Fork me on GitHub
+            </a>
+        </div>
+        <p>
+            This is a small tool to help you make an arbitrary signed message.
+            For instance, a message to identify yourself by means of associating
+            your Stellar account with an account in other system.
+        </p>
+        <form name="message_form">
+            <table>
+                <tr>
+                    <td><label for="source">Account public key:</label></td>
+                    <td>
+                        <input type="text" name="source" id="source"
+                            onchange="go()" onkeypress="go()">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="message">
+                            Message
+                            (e.g. <code>https://t.me/Montenegro_news</code>):
+                        </label>
+                    </td>
+                    <td>
+                        <input type="text" name="message" id="message"
+                            onchange="go()" onkeypress="go()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <p id="output_text" style="line-break: anywhere;"></p>
+        <p id="error_text" style="color: red;"></p>
+        <script>
+            function go() {
+                const fee = StellarSdk.BASE_FEE;
+                const networkPassphrase = StellarSdk.Networks.TESTNET;
+                try {
+                    const source =
+                        new StellarSdk.Account(
+                            document.message_form.source.value, '0'
+                        );
+                    const memo =
+                        new StellarSdk.Memo(
+                            StellarSdk.MemoText,
+                            document.message_form.message.value
+                        );
+                    const tx =
+                        new StellarSdk.TransactionBuilder(
+                            source, {fee, memo, networkPassphrase},
+                        )
+                        .setTimeout(StellarSdk.TimeoutInfinite)
+                        .build();
+                    const xdr = tx.toXDR();
+                    output_text.innerHTML =
+                        `XDR: ${xdr}
+                        <a href="https://laboratory.stellar.org/#xdr-viewer?input=${xdr}">View</a>
+                        <a href="https://laboratory.stellar.org/#txsigner?xdr=${xdr}">Sign</a>`;
+                    error_text.innerText = '';
+                } catch (e) {
+                    output_text.innerText = '';
+                    error_text.innerText = e;
+                }
+            }
+        </script>
+    </body>
+</html>
