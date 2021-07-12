@@ -63,8 +63,16 @@
                     output_text.innerHTML =
                         `XDR: <code>${xdr}</code>
                         <br>
-                        <a href="https://laboratory.stellar.org/#xdr-viewer?input=${xdr}">View</a>
-                        <a href="https://laboratory.stellar.org/#txsigner?xdr=${xdr}">Sign</a>`;
+                        <a href=
+                            "https://laboratory.stellar.org/#xdr-viewer?input=${encodeURIComponent(xdr)}"
+                            >
+                            View
+                        </a>
+                        <a href=
+                            "https://laboratory.stellar.org/#txsigner?xdr=${encodeURIComponent(xdr)}"
+                            >
+                            Sign
+                        </a>`;
                     error_text.innerText = '';
                 } catch (e) {
                     output_text.innerText = '';
